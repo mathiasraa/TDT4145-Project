@@ -7,5 +7,5 @@
 5. It should be possible to regenerate your delivered output by the programs and database delivered.
 
 ## Authors
-- @sindrjha
-- @mathiasraa
+- [@sindrjha](https://www.github.com/sindrjha)
+- [@mathiasraa](https://www.github.com/mathiasraa)
