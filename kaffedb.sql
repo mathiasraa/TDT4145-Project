@@ -13,7 +13,7 @@ CREATE TABLE Region (
   RegionID INTEGER NOT NULL,
   Land_LandID INTEGER NOT NULL,
   Navn TEXT NOT NULL,
-  PRIMARY KEY (RegionID, Land_LandID),
+  PRIMARY KEY (RegionID),
   CONSTRAINT fk_Region_Land FOREIGN KEY (Land_LandID) REFERENCES Land (LandID) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE(Land_LandID, Navn)
 ) -- -----------------------------------------------------
@@ -24,10 +24,9 @@ CREATE TABLE Gård (
   Navn TEXT NOT NULL,
   Høyde INTEGER NOT NULL,
   Region_RegionID INTEGER NOT NULL,
-  Region_Land_LandID INTEGER NOT NULL,
   PRIMARY KEY (GårdID),
-  CONSTRAINT fk_Gård_Region FOREIGN KEY (Region_RegionID, Region_Land_LandID) REFERENCES Region (RegionID, Land_LandID) ON DELETE CASCADE ON UPDATE CASCADE,
-  UNIQUE(Navn, Region_RegionID, Region_Land_LandID)
+  CONSTRAINT fk_Gård_Region FOREIGN KEY (Region_RegionID) REFERENCES Region (RegionID) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE(Navn, Region_RegionID)
 ) -- -----------------------------------------------------
 -- Table KaffebønneArt
 -- -----------------------------------------------------
