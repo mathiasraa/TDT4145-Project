@@ -1,0 +1,148 @@
+{
+  "Land": [
+    {
+      "LandID": 1,
+      "Navn": "El salvador"
+    },
+    {
+      "LandID": 2,
+      "Navn": "Colombia"
+    },
+    {
+      "LandID": 3,
+      "Navn": "Rwanda"
+    }
+  ],
+  "Region": [
+    {
+      "Land_LandID": 1,
+      "Navn": "Santa Ana"
+    },
+    {
+      "Land_LandID": 2,
+      "Navn": "Medellin"
+    },
+    {
+      "Land_LandID": 3,
+      "Navn": "Virunga"
+    }
+  ],
+  "Gård": [
+    {
+      "GårdID": 1,
+      "Navn": "Nombre de Dios",
+      "Høyde": 350,
+      "Region_RegionID": 1
+    },
+    {
+      "GårdID": 2,
+      "Navn": "Gård i Colombia",
+      "Høyde": 560,
+      "Region_RegionID": 2
+    },
+    {
+      "GårdID": 3,
+      "Navn": "Gård i Rwanda",
+      "Høyde": 200,
+      "Region_RegionID": 3
+    }
+  ],
+  "KaffebønneArt": [
+    {
+      "KaffebønneArtID": 1,
+      "Art": "Coffea arabica"
+    },
+    {
+      "KaffebønneArtID": 2,
+      "Art": "Coffea canephora"
+    },
+    {
+      "KaffebønneArtID": 3,
+      "Art": "Coffea liberica"
+    }
+  ],
+  "Kaffebønne": [
+    {
+      "KaffebønneID": 1,
+      "Navn": "Bourbon",
+      "KaffebønneArt_KaffebønneArtID": 1
+    },
+    {
+      "KaffebønneID": 2,
+      "Navn": "Caturra",
+      "KaffebønneArt_KaffebønneArtID": 1
+    },
+    {
+      "KaffebønneID": 3,
+      "Navn": "Castillo",
+      "KaffebønneArt_KaffebønneArtID": 1
+    }
+  ],
+  "Foredlingsmetode": [
+    {
+      "ForedlingsmetodeID": 1,
+      "Navn": "Bærtørket",
+      "Beskrivelse": ""
+    },
+    {
+      "ForedlingsmetodeID": 2,
+      "Navn": "Vasket",
+      "Beskrivelse": ""
+    }
+  ],
+  "Kaffeparti": [
+    {
+      "KaffepartiID": 1,
+      "Innhøstingsår": 2021,
+      "Kilopris": 8,
+      "Gård_GårdID": 1,
+      "Foredlingsmetode_ForedlingsmetodeID": 1
+    }
+  ],
+  "KaffepartiHarKaffebønne": [
+    {
+      "Kaffeparti_KaffepartiID": 1,
+      "Kaffebønne_KaffebønneID": 1
+    }
+  ],
+  "Brenneri": [
+    {
+      "BrenneriID": 1,
+      "Navn": "Jacobsen & Svart"
+    },
+    {
+      "BrenneriID": 2,
+      "Navn": "Friele"
+    }
+  ],
+  "FerdigbrentKaffe": [
+    {
+      "FerdigbrentKaffeID": 1,
+      "Navn": "Vinterkaffe 2022",
+      "Brenningsgrad": "lysbrent",
+      "Dato": "2022-01-20",
+      "Beskrivelse": "En velsmakende og kompleks kaffe for mørketiden",
+      "Kilopris": 600,
+      "Brenneri_BrenneriID": 1,
+      "Kaffeparti_KaffepartiID": 1
+    }
+  ],
+  "Bruker": [
+    {
+      "BrukerID": 1,
+      "Fornavn": "Roger",
+      "Etternavn": "Fredriksen",
+      "Epost": "roger.fred@gmail.com",
+      "Passord": "qwerty"
+    }
+  ],
+  "Kaffesmaking": [
+    {
+      "KaffesmakingID": 1,
+      "Smaksnotater": "Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!",
+      "Poeng": 10,
+      "FerdigbrentKaffe_FerdigbrentKaffeID": 1,
+      "Bruker_BrukerID": 1
+    }
+  ]
+}
