@@ -31,8 +31,8 @@ def find_coffee(coffee_name=None, brewery_name=None, description=None, coffee_id
         try:
             brewery_id = run_query(
                 f"""
-            SELECT BrenneriID FROM Brenneri WHERE Navn = "{brewery_name}"
-            """
+                SELECT BrenneriID FROM Brenneri WHERE Navn = "{brewery_name}"
+                """
             )[0][0]
         except:
             return False
@@ -40,9 +40,9 @@ def find_coffee(coffee_name=None, brewery_name=None, description=None, coffee_id
         try:
             coffee = run_query(
                 f"""
-            SELECT FerdigbrentKaffeID, FerdigbrentKaffe.Navn, Brenneri.Navn
-            FROM FerdigbrentKaffe WHERE FerdigbrentKaffe.Navn = "{coffee_name}" AND Brenneri_BrenneriID = {brewery_id}
-            """
+                SELECT FerdigbrentKaffeID, FerdigbrentKaffe.Navn
+                FROM FerdigbrentKaffe WHERE FerdigbrentKaffe.Navn = "{coffee_name}" AND Brenneri_BrenneriID = {brewery_id}
+                """
             )
         except:
             pass

@@ -46,40 +46,40 @@ def coffee_tasting():
     coffees = list(set(map(lambda coffee: coffee[1], all_coffees())))
     breweries = list(map(lambda coffee: coffee[1], all_breweries()))
 
-    print(title("Kaffenavn:"))
+    print(text("Kaffenavn:"))
     coffee = TerminalMenu(coffees, show_search_hint=True).show()
-    print(title("Brennerinavn:"))
+    print(text("Brennerinavn:"))
     brewery = TerminalMenu(breweries, show_search_hint=True).show()
 
     coffee = find_coffee(coffees[coffee], breweries[brewery])
 
-    print(title(f"Du har valgt kaffen {coffee}"))
+    print(title(f"Du har valgt kaffen {coffee[0][1]}"))
 
-    # tasting_note = input(text("Smaksnotat:"))
-    # points = input("Poeng:")
+    tasting_note = input(text("Smaksnotat:"))
+    points = None
+    while not points or int(points) < 0 or int(points) > 10:
+        points = input(text("Poeng (0-10):"))
 
-    # create_coffee_tasting(
-    #     coffee_id=coffee[0],
-    #     tasting_data={"tasting_note": tasting_note, "points": points},
-    # )
+    create_coffee_tasting(
+        coffee_id=coffee[0][0],
+        tasting_data={"tasting_note": tasting_note, "points": points},
+    )
 
-    # print(title("Smaksnotat opprettet"))
+    print(title("Smaksnotat opprettet"))
 
 
 def coffee_search():
-    print(title("Velg type søk"))
+    print(title("Velg filtreringer"))
 
     terminal_menu = TerminalMenu(
-        ["Søk etter navn og brenneri", "Søk etter beskrivelse"],
+        ["Beskrivelse", "Land", "Foredlingsmetode"],
         multi_select=True,
         show_multi_select_hint=True,
     )
 
     search_menu = terminal_menu.show()
-    if search_menu == 0:
-        print(search_by_name_brewery())
-    elif search_menu == 1:
-        print(search_by_description())
+
+    print(search_menu)
 
 
 def coffee_toplist():
