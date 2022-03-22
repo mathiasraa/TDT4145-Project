@@ -89,3 +89,19 @@ def all_breweries():
         SELECT BrenneriID, Navn FROM Brenneri
         """
     )
+
+
+def log_in(email, password):
+
+    user_data = run_query(
+        f"""
+        SELECT BrukerID, Passord from Bruker where Epost = "{email}"
+        """
+    )
+    if not user_data:
+        return False, "No matchin credentials"
+
+    if password == user_data[0][1]:
+        return True, user_data[0][0]
+    else:
+        return False, "Wrong password"
