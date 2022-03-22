@@ -100,8 +100,21 @@ def log_in(email, password):
     )
     if not user_data:
         return False, "No matchin credentials"
-
-    if password == user_data[0][1]:
-        return True, user_data[0][0]
     else:
-        return False, "Wrong password"
+        if password == user_data[0][1]:
+            return True, user_data[0][0]
+        else:
+            return False, "Wrong password"
+
+
+def register(email, password, first_name, last_name):
+
+    run_query(
+        f"""
+        INSERT INTO Bruker (Epost, Passord, Fornavn, Etternavn)
+        VALUES ("{email}", "{password}", "{first_name}", "{last_name}")
+        """
+    )
+
+
+
