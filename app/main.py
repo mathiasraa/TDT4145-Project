@@ -2,11 +2,11 @@ from simple_term_menu import TerminalMenu
 
 from coffee_filter import coffee_filter
 from queries import (
-    all_breweries,
     all_coffees,
     create_coffee_tasting,
     find_coffee,
     find_coffee_toplist,
+    find_user_toplist,
     log_in,
     register,
 )
@@ -30,7 +30,7 @@ def show_menu():
         [
             "Søk etter kaffe",
             "Legg til kaffesmaking",
-            "Se topp 10 rimlige kaffer",
+            "Se topp 10 beste kaffer for prisen",
             "Se topp 10 brukere",
         ]
     )
@@ -43,16 +43,13 @@ def show_menu():
 def coffee_tasting(user_id):
     print(title("Finn kaffen du har smakt"))
 
-    coffees = list(set(map(lambda coffee: coffee[1], all_coffees())))
-    breweries = list(map(lambda coffee: coffee[1], all_breweries()))
+    coffees = list(set(map(lambda coffee: f"{coffee[1]}, {coffee[2]}", all_coffees())))
+    print(text("Velg kaffe:"))
+    coffee_index = TerminalMenu(coffees, show_search_hint=True).show()
 
-    print(text("Kaffenavn:"))
-    coffee = TerminalMenu(coffees, show_search_hint=True).show()
-    print(text("Brennerinavn:"))
-    brewery = TerminalMenu(breweries, show_search_hint=True).show()
-
-    coffee = find_coffee(coffees[coffee], breweries[brewery])
-    print(coffee)
+    coffee = find_coffee(
+        coffees[coffee_index].split(", ")[0], coffees[coffee_index].split(", ")[1]
+    )
 
     print(title(f"Du har valgt kaffen {coffee[0][1]}"))
 
@@ -89,6 +86,13 @@ def coffee_toplist():
 
     for count, coffee in enumerate(find_coffee_toplist()):
         print(text(f"{count+1}: {coffee[1]} {coffee[2]} pris {coffee[3]} poeng"))
+
+
+def user_toplist():
+    print(title("Her er topp 10 beste kaffer for prisen"))
+
+    for count, user in enumerate(find_user_toplist()):
+        print(text(f"{count+1}: Navn: {user[0]} {user[1]} Antall: {user[2]}"))
 
 
 def authorization_login():
@@ -165,10 +169,11 @@ def authorization():
 
 def program():
 
-    user_id = authorization()
+    # user_id = authorization()
+    user_id = 0
 
     while True:
-        if user_id == False:
+        if str(user_id) == "False":
             break
 
         choice = show_menu()
@@ -179,6 +184,8 @@ def program():
             coffee_tasting(user_id=user_id)
         if choice == 2:
             coffee_toplist()
+        if choice == 3:
+            user_toplist()
 
         print(title("Vil du fortsette?"))
 

@@ -71,6 +71,7 @@ def find_coffee_toplist():
         join Brenneri on BrenneriID = Brenneri_BrenneriID 
         GROUP BY FerdigbrentKaffeID 
         ORDER BY kilopris/AVG(Poeng)
+        LIMIT 10
         """
     )
 
@@ -86,10 +87,12 @@ def all_countries():
 def find_user_toplist():
     return run_query(
         """
-        SELECT Bruker.Fornavn, Bruker.Etternavn, COUNT(DISTINCT FerdigbrentKaffeID) 
+        SELECT Bruker.Fornavn, Bruker.Etternavn, COUNT(DISTINCT FerdigbrentKaffeID) as Score
         FROM Bruker LEFT JOIN Kaffesmaking ON BrukerID = Bruker_BrukerID 
         LEFT JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID 
         GROUP BY BrukerID
+        ORDER BY Score DESC
+        LIMIT 10
         """
     )
 
@@ -97,7 +100,8 @@ def find_user_toplist():
 def all_coffees():
     return run_query(
         """
-        SELECT FerdigbrentKaffeID, Navn FROM FerdigbrentKaffe
+        SELECT FerdigbrentKaffeID, FerdigbrentKaffe.Navn, Brenneri.Navn FROM FerdigbrentKaffe
+        JOIN Brenneri on BrenneriID = Brenneri_BrenneriID
         """
     )
 
