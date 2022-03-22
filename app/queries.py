@@ -50,7 +50,7 @@ def find_coffee(coffee_name=None, brewery_name=None, description=None, coffee_id
     return coffee
 
 
-def create_coffee_tasting(coffee_id, user_id=0, tasting_data=None):
+def create_coffee_tasting(coffee_id, user_id, tasting_data=None):
     tasting_note = tasting_data["tasting_note"]
     points = tasting_data["points"]
 

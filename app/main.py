@@ -1,14 +1,16 @@
 from secrets import choice
 from simple_term_menu import TerminalMenu
-from queries import log_in, register
 
-from coffee_search import search_by_description, search_by_name_brewery
+
+#from coffee_filter import search_by_description, search_by_name_brewery
 from queries import (
     all_breweries,
     all_coffees,
     create_coffee_tasting,
     find_coffee,
     find_coffee_toplist,
+    log_in,
+    register
 )
 from utils.typography import text, title
 
@@ -40,7 +42,7 @@ def show_menu():
     return choice
 
 
-def coffee_tasting():
+def coffee_tasting(user_id):
     print(title("Finn kaffen du har smakt"))
 
     coffees = list(set(map(lambda coffee: coffee[1], all_coffees())))
@@ -52,6 +54,7 @@ def coffee_tasting():
     brewery = TerminalMenu(breweries, show_search_hint=True).show()
 
     coffee = find_coffee(coffees[coffee], breweries[brewery])
+    print(coffee)
 
     print(title(f"Du har valgt kaffen {coffee[0][1]}"))
 
@@ -60,8 +63,9 @@ def coffee_tasting():
     while not points or int(points) < 0 or int(points) > 10:
         points = input(text("Poeng (0-10):"))
 
+
     create_coffee_tasting(
-        coffee_id=coffee[0][0],
+        coffee_id=coffee[0][0],user_id=user_id,
         tasting_data={"tasting_note": tasting_note, "points": points},
     )
 
@@ -98,9 +102,11 @@ def authorization_login():
     password = input("Password: ")
     result = log_in(email, password)
 
-    if result[0]:
+    if result[0]==True:
         print(title("Du er logget inn"))
-        return(result[1])
+        user_id = result[1]
+    
+        return user_id
     else:
         print(title(result[1] + " Vil du prøve på nytt?"))
 
@@ -110,6 +116,7 @@ def authorization_login():
                 "Nei"
             ]
         )
+
         choice = terminal_menu.show()
 
         if choice == 0:
@@ -144,7 +151,7 @@ def authorization_register():
         choice = terminal_menu.show()
 
         if choice == 0:
-            authorization_login()
+            return authorization_login()
         if choice == 1:
             return False
     else:
@@ -160,7 +167,7 @@ def authorization_register():
         choice = terminal_menu.show()
 
         if choice == 0:
-            authorization_register()
+            return authorization_register()
         if choice == 1:
             return False
 
@@ -177,26 +184,25 @@ def authorization():
     choice = terminal_menu.show()
 
     if choice == 0:
-        authorization_login()
+        return authorization_login()
     if choice == 1:
-        authorization_register()
+        return authorization_register()
 
 
 def program():
+
+    user_id = authorization()
+
+    
     while True:
-
-        user_id = authorization()
-
         if user_id == False: break
-
-
 
         choice = show_menu()
 
         if choice == 0:
             coffee_search()
         if choice == 1:
-            coffee_tasting()
+            coffee_tasting(user_id=user_id)
         if choice == 2:
             coffee_toplist()
 
