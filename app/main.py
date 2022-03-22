@@ -1,4 +1,6 @@
+from secrets import choice
 from simple_term_menu import TerminalMenu
+from queries import log_in, register
 
 from coffee_search import search_by_description, search_by_name_brewery
 from queries import (
@@ -84,11 +86,111 @@ def coffee_toplist():
     print(title("Her er topp 10 beste kaffer for prisen"))
 
     for count, coffee in enumerate(find_coffee_toplist()):
-        print(text(f"{count+1}: {coffee[1]} {coffee[2]} pris {coffee[3]} poeng"))
+        print(
+            text(f"{count+1}: {coffee[1]} {coffee[2]} pris {coffee[3]} poeng"))
+
+
+def authorization_login():
+
+    print(title("Logg inn"))
+
+    email = input("Epost: ")
+    password = input("Password: ")
+    result = log_in(email, password)
+
+    if result[0]:
+        print(title("Du er logget inn"))
+        return(result[1])
+    else:
+        print(title(result[1] + " Vil du prøve på nytt?"))
+
+        terminal_menu = TerminalMenu(
+            [
+                "Ja",
+                "Nei"
+            ]
+        )
+        choice = terminal_menu.show()
+
+        if choice == 0:
+            authorization_login()
+        if choice == 1:
+            return False
+
+    
+
+
+def authorization_register():
+
+    print(title("Registrer"))
+
+    email = input("Epost: ")
+    password = input("Password: ")
+    first_name = input("Fornavn: ")
+    last_name = input("Etternavn: ")
+
+    result = register(email, password, first_name, last_name)
+
+    if result[0]:
+
+        print(title("Vil du logge inn?"))
+
+        terminal_menu = TerminalMenu(
+            [
+                "Ja",
+                "Nei"
+            ]
+        )
+        choice = terminal_menu.show()
+
+        if choice == 0:
+            authorization_login()
+        if choice == 1:
+            return False
+    else:
+
+        print(title("Noe gikk galt, vil du prøve på nytt?"))
+
+        terminal_menu = TerminalMenu(
+            [
+                "Ja",
+                "Nei"
+            ]
+        )
+        choice = terminal_menu.show()
+
+        if choice == 0:
+            authorization_register()
+        if choice == 1:
+            return False
+
+
+
+def authorization():
+
+    terminal_menu = TerminalMenu(
+        [
+            "Logg inn",
+            "Registrer"
+        ]
+    )
+    choice = terminal_menu.show()
+
+    if choice == 0:
+        authorization_login()
+    if choice == 1:
+        authorization_register()
 
 
 def program():
     while True:
+
+        user_id = authorization()
+
+        if user_id == False: break
+
+
+
         choice = show_menu()
 
         if choice == 0:
