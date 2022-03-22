@@ -1,52 +1,84 @@
-from queries import find_coffee
+from simple_term_menu import TerminalMenu
+
+from queries import all_countries, find_coffee, run_query
 from utils.typography import text
 
 
 def coffee_filter(filters):
 
-    coffee = NONe
+    filter_description = 0 in filters
+    filter_country = 1 in filters
+    filter_refinement = 2 in filters
 
-    while True:
-        coffee_name = input(text("Kaffenavn:"))
-        if coffee_name.lower() == "avbryt":
-            break
-        brewery_name = input(text("Brennerinavn:"))
-        if brewery_name.lower() == "avbryt":
-            break
+    coffees = []
+    countries = []
+    descripton = " "
+    refinement = " "
+    selectors = []
 
-        coffee = find_coffee(coffee_name, brewery_name)
-        if coffee:
-            coffee = coffee[0]
-            break
-        else:
-            print()
-            print(text("Kaffen eksisterer ikke i databasen."))
-            print(text("Prøv igjen eller skriv 'avbryt':"))
+    if filter_country:
+        print(text("Velg land:"))
+        all_countries_result = all_countries()
+        countries = list(
+            map(
+                lambda index: all_countries_result[index][0],
+                TerminalMenu(
+                    list(map(lambda country: country[0], all_countries_result)),
+                    multi_select=True,
+                    show_multi_select_hint=True,
+                ).show(),
+            )
+        )
+        selectors.append(
+            f"""SelectedFarms AS (
+            SELECT GårdID as ID FROM Gård
+            JOIN Region ON RegionID = Region_RegionID
+            JOIN Land ON LandID = Land_LandID
+            WHERE {" OR "
+            .join(map(lambda country: f"Land.Navn = '{country}'", countries))}
+            )"""
+        )
+    if filter_description:
+        descripton = input(text("Beskrivelsefilter:"))
+        selectors.append(
+            f"""SelectedDescriptions AS (
+            SELECT FerdigbrentKaffe.FerdigbrentKaffeID as ID from Kaffesmaking
+            JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID
+            WHERE Kaffesmaking.Smaksnotater LIKE('%{descripton}%') OR FerdigbrentKaffe.Beskrivelse
+            LIKE('%{descripton}%')
+            ) """
+        )
 
-    return coffee
+    if filter_refinement:
+        print(text("Foredlingsfilter"))
+        refinement = input(text("(skriv '!' foran søk for å eksludere):"))
+        selectors.append(
+            f""" SelectedRefinements AS (
+            SELECT ForedlingsmetodeID as ID FROM Foredlingsmetode
+            WHERE Foredlingsmetode.Navn {"NOT" if refinement[0] == "!" else ""} LIKE('%{refinement.replace("!", "")}%')
+            )"""
+        )
 
+    query = "WITH "
 
-# '''
-#     WITH selectedland AS (
-#         SELECT LandID as id FROM Land WHERE
-#         Navn = 'Rwanda' OR Navn = 'Colombia'),
-#     unwashed AS (
-#         SELECT ForedlingsmetodeID as id FROM Foredlingsmetode
-#         WHERE Foredlingsmetode.Navn != 'Vasket')
+    query += ", ".join(selectors)
 
-#     SELECT Brenneri.Navn, FerdigbrentKaffe.Navn
-#     FROM selectedland JOIN Region ON selectedland.id = Land_LandID
-#     JOIN Gård ON RegionID = Region_RegionID
-#     JOIN Kaffeparti ON Gård.GårdID = Kaffeparti.Gård_GårdID
-#     JOIN unwashed ON unwashed.id = Foredlingsmetode_ForedlingsmetodeID
-#     JOIN FerdigbrentKaffe ON KaffepartiID = Kaffeparti_KaffepartiID
-#     JOIN Brenneri ON BrenneriID = Brenneri_BrenneriID
-# '''
+    query += """
+        SELECT FerdigbrentKaffe.Navn, Brenneri.Navn FROM FerdigbrentKaffe
+        JOIN Brenneri ON Brenneri_BrenneriID = BrenneriID
+        JOIN Kaffeparti ON KaffepartiID = Kaffeparti_KaffepartiID
+        """
+    if filter_country:
+        query += " JOIN SelectedFarms ON SelectedFarms.ID = Gård_GårdID"
+    if filter_description:
+        query += (
+            " JOIN SelectedDescriptions ON SelectedDescriptions.ID = FerdigbrentKaffeID"
+        )
+    if filter_refinement:
+        query += " JOIN SelectedRefinements ON SelectedRefinements.ID = Foredlingsmetode_ForedlingsmetodeID"
 
-# '''
-# SELECT Brenneri.Navn, FerdigbrentKaffe.Navn from Kaffesmaking
-# JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID
-# JOIN Brenneri ON BrenneriID = Brenneri_BrenneriID
-# WHERE Kaffesmaking.Smaksnotater LIKE('%%Wow%') OR FerdigbrentKaffe.Beskrivelse
-# LIKE('%%Wow%')
-# '''
+    query += " GROUP BY FerdigbrentKaffeID"
+
+    coffees = run_query(query)
+
+    return coffees

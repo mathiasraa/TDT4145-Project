@@ -75,6 +75,14 @@ def find_coffee_toplist():
     )
 
 
+def all_countries():
+    return run_query(
+        """
+        SELECT Navn FROM Land
+        """
+    )
+
+
 def all_coffees():
     return run_query(
         """
@@ -115,6 +123,3 @@ def register(email, password, first_name, last_name):
         VALUES ("{email}", "{password}", "{first_name}", "{last_name}")
         """
     )
-
-
-

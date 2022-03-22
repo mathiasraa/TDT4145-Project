@@ -1,6 +1,6 @@
 from simple_term_menu import TerminalMenu
 
-from coffee_search import search_by_description, search_by_name_brewery
+from coffee_filter import coffee_filter
 from queries import (
     all_breweries,
     all_coffees,
@@ -77,7 +77,7 @@ def coffee_search():
 
     search_menu = terminal_menu.show()
 
-    print(search_menu)
+    print(coffee_filter(search_menu))
 
 
 def coffee_toplist():
