@@ -50,7 +50,7 @@ def find_coffee(coffee_name=None, brewery_name=None, description=None, coffee_id
     return coffee
 
 
-def create_coffee_tasting(coffee_id, user_id=0, tasting_data=None):
+def create_coffee_tasting(coffee_id, user_id, tasting_data=None):
     tasting_note = tasting_data["tasting_note"]
     points = tasting_data["points"]
 
@@ -83,6 +83,17 @@ def all_countries():
     )
 
 
+def find_user_toplist():
+    return run_query(
+        """
+        SELECT Bruker.Fornavn, Bruker.Etternavn, COUNT(DISTINCT FerdigbrentKaffeID) 
+        FROM Bruker LEFT JOIN Kaffesmaking ON BrukerID = Bruker_BrukerID 
+        LEFT JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID 
+        GROUP BY BrukerID
+        """
+    )
+
+
 def all_coffees():
     return run_query(
         """
@@ -107,19 +118,23 @@ def log_in(email, password):
         """
     )
     if not user_data:
-        return False, "No matchin credentials"
+        return False, "Kan ikke finne bruker"
     else:
         if password == user_data[0][1]:
             return True, user_data[0][0]
         else:
-            return False, "Wrong password"
+            return False, "Feil passord"
 
 
 def register(email, password, first_name, last_name):
 
-    run_query(
-        f"""
+    try:
+        run_query(
+            f"""
         INSERT INTO Bruker (Epost, Passord, Fornavn, Etternavn)
         VALUES ("{email}", "{password}", "{first_name}", "{last_name}")
         """
-    )
+        )
+        return True, "Opprettet bruker"
+    except:
+        return False, "Epost er allerede i bruk"
