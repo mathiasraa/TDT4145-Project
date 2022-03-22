@@ -169,8 +169,7 @@ def authorization():
 
 def program():
 
-    # user_id = authorization()
-    user_id = 0
+    user_id = authorization()
 
     while True:
         if str(user_id) == "False":
