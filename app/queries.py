@@ -1,4 +1,5 @@
 from utils.fetch import run_query, run_query_params
+import re
 
 
 def all_countries():
@@ -46,6 +47,13 @@ def log_in(email, password):
 
 
 def register(email, password, first_name, last_name):
+
+    if not re.match("[a-z]+\.[a-z]+@[a-z]+\.[a-z]{2,3}", email):
+        return False, "Epost ikke på rett format"
+    if len(password) < 8:
+        return False, "Passord må være minst 8 tegn"
+    if len(first_name) == 0 or len(last_name) == 0:
+        return False, "Skriv inn fornavn og etternavn"
 
     try:
         run_query_params(

@@ -49,7 +49,10 @@ def coffee_filter(filters):
         )
 
         # Creating selecting arguments like (Land.Navn = country_0 OR Land.Navn = country_1 OR ...)
-        args = f"""{" OR ".join(map(lambda country: f"Land.Navn = :country_{countries.index(country)}", countries))}"""
+        args = f"""{" OR ".join(map(
+                        lambda country: f"Land.Navn = :country_{countries.index(country)}",
+                        countries)
+                        )}"""
 
         # Create selector
         selectors.append(
@@ -79,16 +82,17 @@ def coffee_filter(filters):
             ) """
         )
 
-        #adding description to params
+        # adding description to params
         params["description"] = descripton
 
     if filter_refinement:
         print(text("Foredlingsfilter"))
         refinement = input(text("(skriv '!' foran søk for å eksludere):"))
 
-        #adding NOT to query if user types !
+        # adding NOT to query if user types !
         exclude = " NOT" if refinement[0] == "!" else ""
 
+        # removing !
         refinement = "%" + refinement.replace("!", "") + "%"
 
         # Create selector
@@ -99,7 +103,7 @@ def coffee_filter(filters):
             )"""
         )
 
-        #adding refinement to params
+        # adding refinement to params
         params["refinement"] = refinement
 
     # Build querystring
