@@ -2,6 +2,7 @@ from datetime import datetime
 
 from simple_term_menu import TerminalMenu
 
+from authorization import authorization
 from coffee_filter import coffee_filter
 from queries import (
     all_coffees,
@@ -115,85 +116,13 @@ def user_toplist():
         print(text(f"{count+1}: Navn: {user[0]} {user[1]}  Antall: {user[2]}"))
 
 
-def authorization_login():
-
-    print(title("Logg inn"))
-
-    email = input("Epost: ")
-    password = input("Password: ")
-    result = log_in(email, password)
-
-    if result[0] == True:
-        print(title("Du er logget inn"))
-        user_id = result[1]
-
-        return user_id
-    else:
-        print(title(result[1] + " Vil du prøve på nytt?"))
-
-        terminal_menu = TerminalMenu(["Ja", "Nei"])
-
-        choice = terminal_menu.show()
-
-        if choice == 0:
-            authorization_login()
-        if choice == 1:
-            return False
-
-
-def authorization_register():
-
-    print(title("Registrer"))
-
-    email = input("Epost: ")
-    password = input("Password: ")
-    first_name = input("Fornavn: ")
-    last_name = input("Etternavn: ")
-
-    result = register(email, password, first_name, last_name)
-
-    if result[0]:
-
-        print(title("Vil du logge inn?"))
-
-        terminal_menu = TerminalMenu(["Ja", "Nei"])
-        choice = terminal_menu.show()
-
-        if choice == 0:
-            return authorization_login()
-        if choice == 1:
-            return False
-    else:
-
-        print(title("Noe gikk galt, vil du prøve på nytt?"))
-
-        terminal_menu = TerminalMenu(["Ja", "Nei"])
-        choice = terminal_menu.show()
-
-        if choice == 0:
-            return authorization_register()
-        if choice == 1:
-            return False
-
-
-def authorization():
-
-    terminal_menu = TerminalMenu(["Logg inn", "Registrer"])
-    choice = terminal_menu.show()
-
-    if choice == 0:
-        return authorization_login()
-    if choice == 1:
-        return authorization_register()
-
-
 def program():
 
-    # user_id = authorization()
-    user_id = 0
+    user_data = authorization()
+    user_id = user_data[1]
 
     while True:
-        if str(user_id) == "False":
+        if not user_data[0]:
             break
 
         choice = show_menu()
