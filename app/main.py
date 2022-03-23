@@ -53,7 +53,7 @@ def coffee_tasting(user_id):
         coffees[coffee_index].split(", ")[0], coffees[coffee_index].split(", ")[1]
     )
 
-    print(title(f"Du har valgt kaffen {coffee[0][1]}"))
+    print(title(f"Du har valgt kaffen {coffee.get('ferdigbrentkaffe_navn')}"))
 
     tasting_note = input(text("Smaksnotat:"))
     points = None
@@ -61,7 +61,7 @@ def coffee_tasting(user_id):
         points = input(text("Poeng (0-10):"))
 
     create_coffee_tasting(
-        coffee_id=coffee[0][0],
+        coffee_id=coffee.get("ferdigbrentkaffe_id"),
         user_id=user_id,
         tasting_data={
             "tasting_note": tasting_note,
@@ -90,7 +90,11 @@ def coffee_search():
         print(text("Fant ingen resultater"))
     else:
         for coffee in filter_result:
-            print(text(f"* Navn: {coffee[0]}  Brenneri: {coffee[1]}"))
+            print(
+                text(
+                    f"* Navn: {coffee.get('ferdigbrentkaffe_navn')}  Brenneri: {coffee.get('brenneri_navn')}"
+                )
+            )
 
 
 def coffee_toplist():
@@ -185,7 +189,8 @@ def authorization():
 
 def program():
 
-    user_id = authorization()
+    # user_id = authorization()
+    user_id = 0
 
     while True:
         if str(user_id) == "False":

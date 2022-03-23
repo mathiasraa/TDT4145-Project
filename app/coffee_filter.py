@@ -1,6 +1,7 @@
 from simple_term_menu import TerminalMenu
 
-from queries import all_countries, run_query
+from queries import all_countries
+from utils.fetch import run_query
 from utils.typography import text
 
 
@@ -64,10 +65,11 @@ def coffee_filter(filters):
     query += ", ".join(selectors)
 
     query += """
-        SELECT FerdigbrentKaffe.Navn, Brenneri.Navn FROM FerdigbrentKaffe
+        SELECT FerdigbrentKaffe.Navn as ferdigbrentkaffe_navn, Brenneri.Navn as brenneri_navn FROM FerdigbrentKaffe
         JOIN Brenneri ON Brenneri_BrenneriID = BrenneriID
-        JOIN Kaffeparti ON KaffepartiID = Kaffeparti_KaffepartiID
         """
+    if filter_country or filter_refinement:
+        query += " JOIN Kaffeparti ON KaffepartiID = Kaffeparti_KaffepartiID"
     if filter_country:
         query += " JOIN SelectedFarms ON SelectedFarms.ID = Gård_GårdID"
     if filter_description:
