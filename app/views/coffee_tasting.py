@@ -2,7 +2,7 @@ from datetime import datetime
 
 from queries import all_coffees
 from simple_term_menu import TerminalMenu
-from utils.fetch import run_query
+from utils.fetch import run_query, run_query_params
 from utils.typography import text, title
 
 # ================================
@@ -61,20 +61,23 @@ def find_coffee(coffee_name=None, brewery_name=None):
     coffee = None
 
     try:
-        brewery_id = run_query(
-            f"""
-            SELECT BrenneriID as brenneri_id FROM Brenneri WHERE Navn = "{brewery_name}"
+        brewery_id = run_query_params(
             """
+            SELECT BrenneriID as brenneri_id FROM Brenneri WHERE Navn = :brewery_name
+            """, {"brewery_name": brewery_name}
         )[0].get("brenneri_id")
     except:
         return False
 
     try:
-        coffee = run_query(
-            f"""
-            SELECT FerdigbrentKaffeID as ferdigbrentkaffe_id, FerdigbrentKaffe.Navn as ferdigbrentkaffe_navn
-            FROM FerdigbrentKaffe WHERE FerdigbrentKaffe.Navn = "{coffee_name}" AND Brenneri_BrenneriID = {brewery_id}
+        coffee = run_query_params(
             """
+            SELECT FerdigbrentKaffeID as ferdigbrentkaffe_id, FerdigbrentKaffe.Navn as ferdigbrentkaffe_navn
+            FROM FerdigbrentKaffe WHERE FerdigbrentKaffe.Navn = :coffee_name AND Brenneri_BrenneriID = :brewery_id
+            """,{
+                "coffee_name": coffee_name,
+                "brewery_name": brewery_name
+            }
         )[0]
     except:
         return False
@@ -88,9 +91,17 @@ def create_coffee_tasting(coffee_id, user_id, tasting_data=None):
     points = tasting_data["points"]
     date = tasting_data["date"]
 
-    run_query(
-        f"""
-        INSERT INTO Kaffesmaking (Smaksnotater, Poeng, Dato, FerdigbrentKaffe_FerdigbrentKaffeID, Bruker_BrukerID)
-        VALUES ("{tasting_note}", {points}, "{date}", {coffee_id}, {user_id})
+    run_query_params(
         """
+        INSERT INTO Kaffesmaking (Smaksnotater, Poeng, Dato, FerdigbrentKaffe_FerdigbrentKaffeID, Bruker_BrukerID)
+        VALUES (:tasting_note, :points, :date, :coffee_id, :user_id)
+        """,
+        {
+            "tasting_note": tasting_note,
+            "points": points,
+            "date": date,
+            "coffee_id": coffee_id,
+            "user_id": user_id
+
+        }
     )

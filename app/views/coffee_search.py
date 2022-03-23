@@ -30,6 +30,6 @@ def coffee_search():
         for coffee in filter_result:
             print(
                 text(
-                    f"* Navn: {coffee.get('ferdigbrentkaffe_navn')}  Brenneri: {coffee.get('brenneri_navn')}"
+                    f"Navn: {coffee.get('ferdigbrentkaffe_navn')}  Brenneri: {coffee.get('brenneri_navn')}"
                 )
             )

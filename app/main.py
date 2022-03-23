@@ -9,17 +9,7 @@ from views.top_users import top_users
 
 
 def show_menu():
-    menu = f"""
-========================================
-
-    {color.BOLD}{color.YELLOW}Velkommen til KaffeDB{color.END}
-
-    Velg en av handlingene nedenfor
-
-========================================
-"""
-
-    print(menu)
+ 
 
     terminal_menu = TerminalMenu(
         [
@@ -38,14 +28,25 @@ def show_menu():
 
 def main():
 
+    menu = f"""
+========================================
+
+    {color.BOLD}{color.YELLOW}Velkommen til KaffeDB{color.END}
+
+    Velg en av handlingene nedenfor
+
+========================================
+"""
+
+    print(menu)
+
     user_data = authorization()
     user_id = user_data[1]
 
-    print(user_data)
 
     # Main program loop
     while True:
-        if not user_data[0]:
+        if user_data[0] == False:
             break
 
         choice = show_menu()

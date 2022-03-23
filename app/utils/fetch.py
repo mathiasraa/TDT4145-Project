@@ -20,3 +20,16 @@ def run_query(query):
     connection.close()
 
     return rows
+
+def run_query_params(query, params):
+    connection = sqlite3.connect("kaffedb.db")
+    connection.row_factory = dict_factory
+    cursor = connection.cursor()
+    cursor.execute(query, params)
+
+    rows = cursor.fetchall()
+
+    connection.commit()
+    connection.close()
+
+    return rows
