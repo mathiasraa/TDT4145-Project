@@ -41,10 +41,12 @@ def main():
     user_data = authorization()
     user_id = user_data[1]
 
+    print(user_data)
+
     # Main program loop
     while True:
-        # if not user_data[0]:
-        #     break
+        if not user_data[0]:
+            break
 
         choice = show_menu()
 
