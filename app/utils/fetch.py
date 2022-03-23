@@ -15,8 +15,6 @@ def run_query(query):
     cursor.execute(query)
 
     rows = cursor.fetchall()
-    if len(rows) == 1:
-        rows = rows[0]
 
     connection.commit()
     connection.close()
