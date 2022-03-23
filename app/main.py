@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from simple_term_menu import TerminalMenu
 from authorization import authorization
 
@@ -62,7 +64,11 @@ def coffee_tasting(user_id):
     create_coffee_tasting(
         coffee_id=coffee[0][0],
         user_id=user_id,
-        tasting_data={"tasting_note": tasting_note, "points": points},
+        tasting_data={
+            "tasting_note": tasting_note,
+            "points": points,
+            "date": datetime.now().date(),
+        },
     )
 
     print(title("Smaksnotat opprettet"))
@@ -79,21 +85,31 @@ def coffee_search():
 
     search_menu = terminal_menu.show()
 
-    print(coffee_filter(search_menu))
+    filter_result = coffee_filter(search_menu)
+    print(title("Søket ditt ga følgende resultat:"))
+    if len(filter_result) == 0:
+        print(text("Fant ingen resultater"))
+    else:
+        for coffee in filter_result:
+            print(text(f"* Navn: {coffee[0]}  Brenneri: {coffee[1]}"))
 
 
 def coffee_toplist():
     print(title("Her er topp 10 beste kaffer for prisen"))
 
     for count, coffee in enumerate(find_coffee_toplist()):
-        print(text(f"{count+1}: {coffee[1]} {coffee[2]} pris {coffee[3]} poeng"))
+        print(
+            text(
+                f"{count+1}: {coffee[1]} av {coffee[0]}  Pris: {coffee[2]}  Poeng: {round(coffee[3], 1)}"
+            )
+        )
 
 
 def user_toplist():
-    print(title("Her er topp 10 beste kaffer for prisen"))
+    print(title("Topp 10 brukere i antall smakingsregistreringer"))
 
     for count, user in enumerate(find_user_toplist()):
-        print(text(f"{count+1}: Navn: {user[0]} {user[1]} Antall: {user[2]}"))
+        print(text(f"{count+1}: Navn: {user[0]} {user[1]}  Antall: {user[2]}"))
 
 
 

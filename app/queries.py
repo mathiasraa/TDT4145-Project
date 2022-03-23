@@ -14,7 +14,7 @@ def run_query(query):
     return rows
 
 
-def find_coffee(coffee_name=None, brewery_name=None, description=None, coffee_id=None):
+def find_coffee(coffee_name=None, brewery_name=None, description=None):
     coffee = None
 
     if description:
@@ -53,11 +53,12 @@ def find_coffee(coffee_name=None, brewery_name=None, description=None, coffee_id
 def create_coffee_tasting(coffee_id, user_id, tasting_data=None):
     tasting_note = tasting_data["tasting_note"]
     points = tasting_data["points"]
+    date = tasting_data["date"]
 
     run_query(
         f"""
-        INSERT INTO Kaffesmaking (Smaksnotater, Poeng, FerdigbrentKaffe_FerdigbrentKaffeID, Bruker_BrukerID)
-        VALUES ("{tasting_note}", {points}, {coffee_id}, {user_id})
+        INSERT INTO Kaffesmaking (Smaksnotater, Poeng, Dato, FerdigbrentKaffe_FerdigbrentKaffeID, Bruker_BrukerID)
+        VALUES ("{tasting_note}", {points}, "{date}", {coffee_id}, {user_id})
         """
     )
 

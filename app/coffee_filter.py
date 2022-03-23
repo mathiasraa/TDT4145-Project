@@ -1,6 +1,6 @@
 from simple_term_menu import TerminalMenu
 
-from queries import all_countries, find_coffee, run_query
+from queries import all_countries, run_query
 from utils.typography import text
 
 
