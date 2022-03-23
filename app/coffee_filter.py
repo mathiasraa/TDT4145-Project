@@ -1,7 +1,7 @@
 from simple_term_menu import TerminalMenu
 
 from queries import all_countries
-from utils.fetch import run_query
+from utils.fetch import run_query, run_query_params
 from utils.typography import text
 
 
@@ -19,12 +19,14 @@ def coffee_filter(filters):
     coffees = []
 
     # Init filter inputs
-    countries = []
+    countries = ()
     descripton = " "
     refinement = " "
 
     # Database selection views for filtration
     selectors = []
+
+    params = {}
 
     if filter_country:
         print(text("Velg land:"))
@@ -45,41 +47,60 @@ def coffee_filter(filters):
                 ).show(),
             )
         )
+
+        # Creating selecting arguments like (Land.Navn = country_0 OR Land.Navn = country_1 OR ...)
+        args = f"""{" OR ".join(map(lambda country: f"Land.Navn = :country_{countries.index(country)}", countries))}"""
+
         # Create selector
         selectors.append(
             f"""SelectedFarms AS (
             SELECT GårdID as ID FROM Gård
             JOIN Region ON RegionID = Region_RegionID
             JOIN Land ON LandID = Land_LandID
-            WHERE {" OR "
-            .join(map(lambda country: f"Land.Navn = '{country}'", countries))}
+            WHERE {args}
             )"""
         )
+        # Creating entries in params like (county_0: Country Name)
+        for index, country in enumerate(countries):
+            params[f"country_{index}"] = f"{country}"
 
     if filter_description:
         descripton = input(text("Beskrivelsefilter:"))
 
+        descripton = "%" + descripton + "%"
+
         # Create selector
         selectors.append(
-            f"""SelectedDescriptions AS (
+            """SelectedDescriptions AS (
             SELECT FerdigbrentKaffe.FerdigbrentKaffeID as ID from Kaffesmaking
             JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID
-            WHERE Kaffesmaking.Smaksnotater LIKE('%{descripton}%') OR FerdigbrentKaffe.Beskrivelse
-            LIKE('%{descripton}%')
+            WHERE Kaffesmaking.Smaksnotater LIKE(:description) OR FerdigbrentKaffe.Beskrivelse
+            LIKE(:description)
             ) """
         )
+
+        #adding description to params
+        params["description"] = descripton
 
     if filter_refinement:
         print(text("Foredlingsfilter"))
         refinement = input(text("(skriv '!' foran søk for å eksludere):"))
 
+        #adding NOT to query if user types !
+        exclude = " NOT" if refinement[0] == "!" else ""
+
+        refinement = "%" + refinement.replace("!", "") + "%"
+
         # Create selector
         selectors.append(
-            f""" SelectedRefinements AS (
+            f"""SelectedRefinements AS (
             SELECT ForedlingsmetodeID as ID FROM Foredlingsmetode
-            WHERE Foredlingsmetode.Navn {"NOT" if refinement[0] == "!" else ""} LIKE('%{refinement.replace("!", "")}%')
+            WHERE Foredlingsmetode.Navn {exclude} LIKE(:refinement)
             )"""
         )
+
+        #adding refinement to params
+        params["refinement"] = refinement
 
     # Build querystring
     query = "WITH "
@@ -105,6 +126,6 @@ def coffee_filter(filters):
     # Ensure no duplicates
     query += " GROUP BY FerdigbrentKaffeID"
 
-    coffees = run_query(query)
+    coffees = run_query_params(query, params)
 
     return coffees
