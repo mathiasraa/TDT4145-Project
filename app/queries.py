@@ -32,7 +32,7 @@ def log_in(email, password):
         f"""
         SELECT BrukerID as bruker_id, Passord as bruker_passord from Bruker where Epost = "{email}"
         """
-    )
+    )[0]
     if not user_data:
         return False, "Kan ikke finne bruker"
     else:

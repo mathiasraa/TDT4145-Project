@@ -16,7 +16,7 @@ def top_coffees():
         print(
             text(
                 f"""{count+1}: {coffee.get('ferdigbrent_kaffenavn')} av {coffee.get('brenneri_navn')} 
-                                Pris: {coffee.get('ferdigbrentkaffe_kilopris')}  Poeng: {round(coffee.get('ferdigbrentkaffe_poeng'), 1)}"""
+       Pris: {coffee.get('ferdigbrentkaffe_kilopris')}  Poeng: {round(coffee.get('ferdigbrentkaffe_poeng'), 1)}"""
             )
         )
 

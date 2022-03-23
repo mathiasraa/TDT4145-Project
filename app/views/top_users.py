@@ -31,7 +31,7 @@ def find_user_toplist():
         FROM Bruker LEFT JOIN Kaffesmaking ON BrukerID = Bruker_BrukerID 
         LEFT JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID 
         GROUP BY BrukerID
-        ORDER BY Score DESC
+        ORDER BY antall DESC
         LIMIT 10
         """
     )

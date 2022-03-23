@@ -1,6 +1,6 @@
 from simple_term_menu import TerminalMenu
 
-from utils.typography import text, title
+from utils.typography import color, text, title
 from views.authorization import authorization
 from views.coffee_search import coffee_search
 from views.coffee_tasting import coffee_tasting
@@ -9,10 +9,10 @@ from views.top_users import top_users
 
 
 def show_menu():
-    menu = """
+    menu = f"""
 ========================================
 
-    Velkommen til KaffeDB
+    {color.BOLD}{color.YELLOW}Velkommen til KaffeDB{color.END}
 
     Velg en av handlingene nedenfor
 
@@ -27,6 +27,7 @@ def show_menu():
             "Legg til kaffesmaking",
             "Se topp 10 beste kaffer for prisen",
             "Se topp 10 brukere",
+            "Avslutt",
         ]
     )
 
@@ -56,6 +57,9 @@ def main():
             top_coffees()
         if choice == 3:
             top_users()
+        if choice == 4:
+            print(text("Ses neste gang!"))
+            break
 
         # Handle continuation / exit
         print(title("Vil du fortsette?"))
