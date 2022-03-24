@@ -48,7 +48,7 @@ def coffee_filter(filters):
             )
         )
 
-        # Creating selecting arguments like (Land.Navn = country_0 OR Land.Navn = country_1 OR ...)
+        # Creating selecting arguments like (Land.Navn = :country_0 OR Land.Navn = :country_1 OR ...)
         args = f"""{" OR ".join(map(
                         lambda country: f"Land.Navn = :country_{countries.index(country)}",
                         countries)
