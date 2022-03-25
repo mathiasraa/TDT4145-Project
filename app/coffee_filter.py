@@ -26,6 +26,7 @@ def coffee_filter(filters):
     # Database selection views for filtration
     selectors = []
 
+    # Parameters to use when executing query
     params = {}
 
     if filter_country:
@@ -92,7 +93,7 @@ def coffee_filter(filters):
         # adding NOT to query if user types !
         exclude = " NOT" if refinement[0] == "!" else ""
 
-        # removing !
+        # removing ! and addingg % if contains
         refinement = "%" + refinement.replace("!", "") + "%"
 
         # Create selector
