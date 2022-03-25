@@ -13,7 +13,11 @@ def all_countries():
 def all_coffees():
     return run_query(
         """
-        SELECT FerdigbrentKaffeID as ferdigbrentkaffe_id, FerdigbrentKaffe.Navn as ferdigbrentkaffe_navn, Brenneri.Navn as brenneri_navn FROM FerdigbrentKaffe
+        SELECT 
+        FerdigbrentKaffeID as ferdigbrentkaffe_id, 
+        FerdigbrentKaffe.Navn as ferdigbrentkaffe_navn, 
+        Brenneri.Navn as brenneri_navn 
+        FROM FerdigbrentKaffe
         JOIN Brenneri on BrenneriID = Brenneri_BrenneriID
         """
     )
