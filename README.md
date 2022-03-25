@@ -6,6 +6,13 @@
 4. Concise and clear description in the document
 5. It should be possible to regenerate your delivered output by the programs and database delivered.
 
+To run:
+
+    `pip install simple-term-menu`
+
+    run main.py
+
+
 ## Authors
 - [@sindrjha](https://www.github.com/sindrjha)
 - [@mathiasraa](https://www.github.com/mathiasraa)
