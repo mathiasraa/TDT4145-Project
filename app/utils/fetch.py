@@ -33,3 +33,5 @@ def run_query_params(query, params):
     connection.close()
 
     return rows
+
+

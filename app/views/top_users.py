@@ -30,9 +30,11 @@ def find_user_toplist():
             COUNT(DISTINCT FerdigbrentKaffeID) as antall
         FROM Bruker LEFT JOIN Kaffesmaking ON BrukerID = Bruker_BrukerID 
         LEFT JOIN FerdigbrentKaffe ON FerdigbrentKaffeID = FerdigbrentKaffe_FerdigbrentKaffeID
-        WHERE Kaffesmaking.Dato > '2022-01-01' AND Kaffesmaking.Dato < '2023-01-01'
+        WHERE Kaffesmaking.Dato > '2022-01-01' AND Kaffesmaking.Dato < '2023-01-01' OR Kaffesmaking.Dato IS NULL
         GROUP BY BrukerID
         ORDER BY antall DESC
         LIMIT 10
         """
     )
+
+

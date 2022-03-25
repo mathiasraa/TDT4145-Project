@@ -23,14 +23,6 @@ def all_coffees():
     )
 
 
-def all_breweries():
-    return run_query(
-        """
-        SELECT BrenneriID as brenneri_id, Navn as brenneri_navn FROM Brenneri
-        """
-    )
-
-
 def log_in(email, password):
 
     user_data = run_query_params(
