@@ -15,7 +15,7 @@ def top_coffees():
     for count, coffee in enumerate(find_coffee_toplist()):
         print(
             text(
-                f"""{count+1}: {coffee.get('ferdigbrent_kaffenavn')} av {coffee.get('brenneri_navn')} 
+                f"""{count+1}: {coffee.get('ferdigbrentkaffe_navn')} av {coffee.get('brenneri_navn')} 
        Pris: {coffee.get('ferdigbrentkaffe_kilopris')}  Poeng: {round(coffee.get('ferdigbrentkaffe_poeng'), 1)}"""
             )
         )
@@ -33,7 +33,7 @@ def find_coffee_toplist():
         JOIN FerdigbrentKaffe ON FerdigbrentKaffe_FerdigbrentKaffeID = FerdigbrentKaffeID 
         JOIN Brenneri ON BrenneriID = Brenneri_BrenneriID 
         GROUP BY FerdigbrentKaffeID 
-        ORDER BY kilopris/AVG(Poeng)
+        ORDER BY AVG(Poeng)/kilopris DESC
         LIMIT 10
         """
     )

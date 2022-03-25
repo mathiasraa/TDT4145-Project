@@ -48,7 +48,7 @@ def log_in(email, password):
 
 def register(email, password, first_name, last_name):
 
-    if not re.match("[a-z]+\.[a-z]+@[a-z]+\.[a-z]{2,3}", email):
+    if not re.match("[a-z]+@[a-z]+\.[a-z]{2,3}", email):
         return False, "Epost ikke på rett format"
     if len(password) < 8:
         return False, "Passord må være minst 8 tegn"

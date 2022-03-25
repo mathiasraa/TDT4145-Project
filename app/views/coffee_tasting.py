@@ -31,10 +31,11 @@ def coffee_tasting(user_id):
     # Show terminal menu
     coffee_index = TerminalMenu(coffees_menu, show_search_hint=True).show()
 
-    # Get selected coffee
-    coffee = coffees_from_database[coffee_index]
 
-    print(title(f"Du har valgt kaffen {coffee.get('ferdigbrentkaffe_navn')}"))
+    # Get selected coffee
+    coffee = coffees_from_database[len(coffees_from_database)-coffee_index-1]
+
+    print(title(f"Du har valgt kaffen {coffee.get('ferdigbrentkaffe_navn')}, {coffee.get('brenneri_navn')}"))
 
     tasting_note = input(text("Smaksnotat:"))
 
