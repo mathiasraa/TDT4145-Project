@@ -41,6 +41,9 @@ def main():
     print(menu)
 
     user_data = authorization()
+    if user_data is None:
+        print(text("Noe gikk galt, prøv på nytt"))
+        user_data = authorization()
     user_id = user_data[1]
 
 
